@@ -5,16 +5,16 @@ from .models import Conversation,Message
 from channels.db import database_sync_to_async
 import json
 import redis
+import os
 
 class ChatConsumer(WebsocketConsumer):
 
     @property
     def redis_client(self):
-      return redis.Redis(
-        host="127.0.0.1",
-        port=6379,
-        decode_responses=True
-    )
+        return redis.from_url(
+            os.getenv("REDIS_URL"),
+            decode_responses=True
+        )
 
     @database_sync_to_async
     def save_message(self, content):
