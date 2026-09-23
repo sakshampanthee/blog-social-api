@@ -76,7 +76,7 @@ class ChatConsumer(WebsocketConsumer):
             })
             return
         
-        message=async_to_sync(self.save_message)(text_data)
+        message=async_to_sync(self.save_message)(data["content"])
 
         message_data = {
         "id": message.id,
