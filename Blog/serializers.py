@@ -28,6 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user 
 
 class PostSerializer(serializers.ModelSerializer):
+    profile_image=serializers.ImageField(source='profile.profile_image',read_only=True)
     author=serializers.ReadOnlyField(source='author.username')
     like_count=serializers.SerializerMethodField()
     is_liked=serializers.SerializerMethodField()
@@ -35,7 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Post
-        fields=['id','title','content','image','author','like_count','is_liked','comment_count','created_at','updated_at']
+        fields=['id','title','content','profile_image','image','author','like_count','is_liked','comment_count','created_at','updated_at']
         read_only_fields=['id','created_at','updated_at']
 
     def get_like_count(self, obj):
@@ -141,19 +142,21 @@ class CommentListSerializer(serializers.ModelSerializer):
         return CommentListSerializer(replies,many=True,context=self.context).data
 
 class ConversationSerializer(serializers.ModelSerializer):
+    profile_image=serializers.ImageField(source='profile.profile_image',read_only=True)
     user1 = serializers.CharField(source="user1.username", read_only=True)
     user2 = serializers.CharField(source="user2.username", read_only=True)
 
     class Meta:
         model = Conversation
-        fields = ["id", "user1", "user2", "created_at"]
+        fields = ["id", "user1", "user2","profile_image", "created_at"]
 
 class MessageSerializer(serializers.ModelSerializer):
+    profile_image=serializers.ImageField(source='profile.profile_image',read_only=True)
     sender = serializers.CharField(source="sender.username",read_only=True)
 
     class Meta:
         model = Message
-        fields = ["id","conversation","sender","content","is_read","created_at"]
+        fields = ["id","conversation","profile_image","sender","content","is_read","created_at"]
 
 
     
