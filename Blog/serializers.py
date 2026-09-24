@@ -54,13 +54,14 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.comments.count()
 
 class ProfileSerializer(serializers.ModelSerializer):
+    id=serializers.IntegerField(source='user.id', read_only=True)
     username=serializers.CharField(source='user.username',read_only=True)
     followers_count=serializers.SerializerMethodField()
     following_count=serializers.SerializerMethodField()
 
     class Meta:
         model=Profile
-        fields=['username','bio','profile_image','followers_count','following_count']
+        fields=['id','username','bio','profile_image','followers_count','following_count']
 
     def get_followers_count(self, obj):
         return obj.user.followers.count()
